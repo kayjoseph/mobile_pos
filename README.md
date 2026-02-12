@@ -1,16 +1,11 @@
-# mobile_pos
+# 📱 Mobile POS Application
 
-A new Flutter project.
+## 🧩 Problem Statement
 
-## Getting Started
+Many small and medium-sized businesses still rely on manual records, notebooks, or disconnected systems to manage products, sales, and expenses.  
+This makes it difficult to track stock levels, monitor daily sales performance, control business expenses, and generate reliable business reports.  
+As a result, business owners lack timely and accurate information for decision-making, stock planning, and financial control.
 
-This project is a starting point for a Flutter application.
+The Mobile POS application addresses this problem by providing a simple, centralized, and mobile-based system that enables business owners and attendants to manage sales operations, inventory, expenses, and business reports in one platform.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
