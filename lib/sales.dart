@@ -583,7 +583,6 @@ class _SalesState extends State<Sales> {
                           final price = double.tryParse(
                               product.sellingPrice) ??
                               0;
-
                           return ListTile(
                             title: Text(product.name),
                             subtitle: Text(
@@ -608,9 +607,7 @@ class _SalesState extends State<Sales> {
                             ),
                           );
                         }).toList(),
-
                         const Divider(),
-
                         Row(
                           mainAxisAlignment:
                           MainAxisAlignment.spaceBetween,
@@ -703,7 +700,7 @@ class _SalesState extends State<Sales> {
 
                 Expanded(
                   child: _filteredSales.isEmpty
-                      ? const Center(child: Text('No sales found'))
+                      ? const Center(child: Text('No sale found'))
                       : ListView.builder(
                     itemCount: _filteredSales.length,
                     itemBuilder: (context, index) {
@@ -733,8 +730,6 @@ class _SalesState extends State<Sales> {
                     },
                   ),
                 ),
-
-                // 💰 Grand total
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
