@@ -79,9 +79,14 @@ class _ExpensesState extends State<Expenses> {
     return DefaultTabController(
       length: 2, // two tabs
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text('Expenses'),
+          backgroundColor: Colors.blueAccent,
+          title: const Text('Expenses', style: TextStyle(color: Colors.white),),
           bottom: const TabBar(
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white,
+            indicatorColor: Colors.white,
             tabs: [
               Tab(text: 'Add Expense', icon: Icon(Icons.add)),
               Tab(text: 'Expense List', icon: Icon(Icons.list)),

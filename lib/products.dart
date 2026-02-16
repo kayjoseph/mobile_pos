@@ -3,7 +3,6 @@ import 'package:mobile_pos/LoginPage.dart';
 import 'package:mobile_pos/add_item.dart';
 import 'package:mobile_pos/customer.dart';
 import 'package:mobile_pos/expenses.dart';
-import 'package:mobile_pos/help.dart';
 import 'package:mobile_pos/home.dart';
 import 'package:mobile_pos/products_report.dart';
 import 'package:mobile_pos/profit&loss_report.dart';
@@ -155,15 +154,15 @@ class _ProductsState extends State<Products> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.orangeAccent,
           elevation: 1,
           title: Text(
             'Products (${Products.products.length})',
             style: const TextStyle(color: Colors.black),
           ),
           bottom: const TabBar(
-            labelColor: Color(0xFF1ABC9C),
-            unselectedLabelColor: Colors.grey,
+            labelColor: Colors.blueAccent,
+            unselectedLabelColor: Colors.white,
             indicatorColor: Color(0xFF1ABC9C),
             tabs: [
               Tab(text: 'ITEMS'),
