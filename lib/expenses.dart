@@ -136,6 +136,19 @@ class _ExpensesState extends State<Expenses> {
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.wallet, color: Colors.blue),
+                title: const Text('Expenses'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Expenses(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
                 leading: const Icon(Icons.local_shipping, color: Colors.blue),
                 title: const Text('Suppliers'),
                 onTap: () {
@@ -182,7 +195,7 @@ class _ExpensesState extends State<Expenses> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.logout_outlined, color: Colors.blue),
+                leading: const Icon(Icons.logout_outlined, color: Colors.red),
                 title: const Text('Sign Out'),
                 onTap: () {
                   Navigator.pop(context);
