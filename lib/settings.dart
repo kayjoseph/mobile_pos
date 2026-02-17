@@ -23,7 +23,8 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.orangeAccent,
+        title: Text("Settings", style: TextStyle(color: Colors.white),),
       ),
       drawer: Drawer(
         child: ListView(
