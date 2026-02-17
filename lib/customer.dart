@@ -52,7 +52,8 @@ class _CreateCustomerPageState extends State<CreateCustomerPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.orangeAccent,
+        title: Text("Customers"),
       ),
       drawer: Drawer(
         child: ListView(
