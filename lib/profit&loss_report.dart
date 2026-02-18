@@ -170,6 +170,7 @@ class _ProfitLossReportState extends State<ProfitLossReport> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.orangeAccent,
         title: const Text('Profit & Loss Report'),
         actions: [
           IconButton(
