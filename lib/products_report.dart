@@ -102,6 +102,7 @@ class ProductsValuationReport extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.orangeAccent,
         title: const Text('Products & Valuation Report'),
         actions: [
           IconButton(
