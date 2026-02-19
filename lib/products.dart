@@ -166,7 +166,7 @@ class _ProductsState extends State<Products> {
             indicatorColor: Color(0xFF1ABC9C),
             tabs: [
               Tab(text: 'ITEMS'),
-              Tab(text: 'STOCK'),
+              //Tab(text: 'STOCK'),
               Tab(text: 'CATEGORIES'),
             ],
           ),
@@ -402,7 +402,6 @@ class _ProductsState extends State<Products> {
                       );
                     },
                   ),
-                  const Center(child: Text('Stock List')),
                   const Center(child: Text('Categories List')),
                 ],
               ),
