@@ -76,7 +76,6 @@ class _ExpensesState extends State<Expenses> {
       setState(() {});
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -228,17 +227,6 @@ class _ExpensesState extends State<Expenses> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.help_outline, color: Colors.blue),
-                title: const Text('Help'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Help()),
-                  );
-                },
-              ),
-              ListTile(
                 leading: const Icon(Icons.logout_outlined, color: Colors.red),
                 title: const Text('Sign Out'),
                 onTap: () {
@@ -254,7 +242,6 @@ class _ExpensesState extends State<Expenses> {
         ),
         body: TabBarView(
           children: [
-            // Tab 1: Add Expense
             Padding(
               padding: const EdgeInsets.all(16),
               child: Form(
@@ -322,8 +309,6 @@ class _ExpensesState extends State<Expenses> {
                         ),
                       ),
                     ),
-
-
                   ],
                 ),
               ),
