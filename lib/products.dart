@@ -17,6 +17,8 @@ class Products extends StatefulWidget {
 
   // 🔹 SHARED INVENTORY (accessible as Products.products)
   static final List<Product> products = [];
+  static final List<String> categories = [];
+
 
   @override
   State<Products> createState() => _ProductsState();
@@ -51,6 +53,85 @@ class _ProductsState extends State<Products> {
             .toList();
       }
     });
+  }
+  void _showAddCategoryDialog() {
+    final controller = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Add Category'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            labelText: 'Category name',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              _addCategory(controller.text);
+              Navigator.pop(context);
+            },
+            child: const Text('Add'),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _showEditCategoryDialog(int index) {
+    final controller =
+    TextEditingController(text: Products.categories[index]);
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Edit Category'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            labelText: 'Category name',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final newName = controller.text.trim();
+
+              if (newName.isEmpty) return;
+
+              setState(() {
+                Products.categories[index] = newName;
+              });
+
+              Navigator.pop(context);
+            },
+            child: const Text('Save'),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _addCategory(String name) {
+    final trimmed = name.trim();
+
+    if (trimmed.isEmpty) return;
+
+    if (!Products.categories.contains(trimmed)) {
+      setState(() {
+        Products.categories.add(trimmed);
+      });
+    }
   }
 
   Widget _dialogField(
@@ -150,7 +231,7 @@ class _ProductsState extends State<Products> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -319,45 +400,63 @@ class _ProductsState extends State<Products> {
         ),
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
-              child: Container(
-                height: 45,
-                decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(8)),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 10),
-                    const Icon(Icons.search, color: Colors.grey),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: _filterProducts,
-                        decoration: const InputDecoration(
-                          hintText: 'Search items',
-                          border: InputBorder.none,
+            Builder(
+              builder: (context) {
+                final tabController = DefaultTabController.of(context);
+
+                return AnimatedBuilder(
+                  animation: tabController,
+                  builder: (context, _) {
+                    final isItemsTab = tabController.index == 0;
+
+                    if (!isItemsTab) {
+                      return const SizedBox.shrink(); // hide on Categories tab
+                    }
+
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
+                      child: Container(
+                        height: 45,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 10),
+                            const Icon(Icons.search, color: Colors.grey),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: TextField(
+                                controller: _searchController,
+                                onChanged: _filterProducts,
+                                decoration: const InputDecoration(
+                                  hintText: 'Search items',
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                            TextButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        AddItem(onProductCreated: _addProduct),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.add_circle,
+                                  color: Color(0xFF1ABC9C)),
+                              label: const Text('Add Item'),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    TextButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                AddItem(onProductCreated: _addProduct),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.add_circle,
-                          color: Color(0xFF1ABC9C)),
-                      label: const Text('Add Item'),
-                    ),
-                  ],
-                ),
-              ),
+                    );
+                  },
+                );
+              },
             ),
             Expanded(
               child: TabBarView(
@@ -402,7 +501,59 @@ class _ProductsState extends State<Products> {
                       );
                     },
                   ),
-                  const Center(child: Text('Categories List')),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton.icon(
+                            onPressed: _showAddCategoryDialog,
+                            icon: const Icon(Icons.add),
+                            label: const Text('Add Category'),
+                          ),
+                        ),
+                      ),
+
+                      Expanded(
+                        child: Products.categories.isEmpty
+                            ? const Center(child: Text('No categories yet'))
+                            : ListView.builder(
+                          itemCount: Products.categories.length,
+                          itemBuilder: (context, index) {
+                            final category = Products.categories[index];
+
+                            return Card(
+                              margin:
+                              const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              child: ListTile(
+                                leading: const Icon(Icons.category, color: Colors.blueAccent,),
+                                title: Text(category),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.edit, color: Colors.blue),
+                                      onPressed: () => _showEditCategoryDialog(index),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete, color: Colors.red),
+                                      onPressed: () {
+                                        setState(() {
+                                          Products.categories.removeAt(index);
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
