@@ -50,8 +50,10 @@ class _CreateSupplierPageState extends State<CreateSupplierPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.orangeAccent,
+        title: Text("Suppliers"),
       ),
       drawer: Drawer(
         child: ListView(
