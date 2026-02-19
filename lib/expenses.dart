@@ -4,7 +4,10 @@ import 'package:mobile_pos/products.dart';
 import 'package:mobile_pos/customer.dart';
 import 'package:mobile_pos/help.dart';
 import 'package:mobile_pos/home.dart';
+import 'package:mobile_pos/products_report.dart';
+import 'package:mobile_pos/profit&loss_report.dart';
 import 'package:mobile_pos/sales.dart';
+import 'package:mobile_pos/sales_report.dart';
 import 'package:mobile_pos/settings.dart';
 import 'package:mobile_pos/supplier.dart';
 import 'expense_model.dart';
@@ -171,6 +174,47 @@ class _ExpensesState extends State<Expenses> {
                         builder: (context) => CreateCustomerPage()),
                   );
                 },
+              ),
+              ExpansionTile(
+                leading: const Icon(Icons.folder_open, color: Colors.blue),
+                title: const Text('Reports Manager'),
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.inventory_2_outlined, color: Colors.blueAccent, size: 20,),
+                    title: const Text('Products Report', style: TextStyle(fontSize: 14),),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const ProductsValuationReport(),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.show_chart, color: Colors.blueAccent, size: 20,),
+                    title: const Text('Sales Report', style: TextStyle(fontSize: 14),),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SalesReport(),//SalesReportPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.insert_chart_outlined, color: Colors.blueAccent, size: 20,),
+                    title: const Text('Profit & Loss Report', style: TextStyle(fontSize: 14),),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const ProfitLossReport(),
+                        ),
+                      );
+                    },
+                  )
+                ],
               ),
               ListTile(
                 leading: const Icon(Icons.settings, color: Colors.blue),
