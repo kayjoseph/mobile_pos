@@ -16,13 +16,11 @@ class _ProductListState extends State<ProductList> {
     });
     Navigator.pop(context);
   }
-
   void _deleteProduct(int index) {
     setState(() {
       _products.removeAt(index);
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +30,6 @@ class _ProductListState extends State<ProductList> {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              // Navigate to the AddItem page
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -48,7 +45,13 @@ class _ProductListState extends State<ProductList> {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(_products[index].name),
-            subtitle: Text("Price: ${_products[index].sellingPrice}"),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Category: ${_products[index].category}"),
+                Text("Price: ${_products[index].sellingPrice}"),
+              ],
+            ),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () => _deleteProduct(index),
