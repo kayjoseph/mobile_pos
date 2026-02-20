@@ -485,16 +485,35 @@ class _ProductsState extends State<Products> {
                                     _showEditDialog(product, realIndex),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete,
-                                    color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    Products.products.removeAt(realIndex);
-                                    _filteredProducts =
-                                        List.from(Products.products);
-                                  });
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () async {
+                                  final confirm = await showDialog<bool>(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('Delete item'),
+                                      content: const Text('Are you sure you want to delete this item?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context, false),
+                                          child: const Text('No'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () => Navigator.pop(context, true),
+                                          child: const Text('Yes'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+
+                                  if (confirm == true) {
+                                    setState(() {
+                                      Products.products.removeAt(realIndex);
+                                      _filteredProducts = List.from(Products.products);
+                                    });
+                                  }
                                 },
                               ),
+
                             ],
                           ),
                         ),
@@ -522,7 +541,6 @@ class _ProductsState extends State<Products> {
                           itemCount: Products.categories.length,
                           itemBuilder: (context, index) {
                             final category = Products.categories[index];
-
                             return Card(
                               margin:
                               const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -538,12 +556,32 @@ class _ProductsState extends State<Products> {
                                     ),
                                     IconButton(
                                       icon: const Icon(Icons.delete, color: Colors.red),
-                                      onPressed: () {
-                                        setState(() {
-                                          Products.categories.removeAt(index);
-                                        });
+                                      onPressed: () async {
+                                        final confirm = await showDialog<bool>(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: const Text('Delete Category'),
+                                            content: const Text('Are you sure you want to delete this category?'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(context, false),
+                                                child: const Text('No'),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () => Navigator.pop(context, true),
+                                                child: const Text('Yes'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                        if (confirm == true) {
+                                          setState(() {
+                                            Products.categories.removeAt(index);
+                                          });
+                                        }
                                       },
                                     ),
+
                                   ],
                                 ),
 
