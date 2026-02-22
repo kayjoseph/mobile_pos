@@ -360,7 +360,11 @@ class Home extends StatelessWidget {
             children: [
               const Text(
                 'Sales by Category Today',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline,
+                ),
               ),
               const SizedBox(height: 12),
               SizedBox(
