@@ -83,7 +83,8 @@ class _SuppliersListState extends State<SuppliersList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Suppliers'),
+        backgroundColor: Colors.orangeAccent,
+        title: const Text('Suppliers List', style: TextStyle(color: Colors.white),),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 15),
@@ -114,7 +115,9 @@ class _SuppliersListState extends State<SuppliersList> {
         ],
       ),
       body: widget.suppliers.isEmpty
-          ? const Center(child: Text('No suppliers added yet'))
+          ? const Center(child: Text('No suppliers added yet',
+      style: TextStyle(fontSize: 18,
+      ),))
           : ListView.builder(
         itemCount: widget.suppliers.length,
         itemBuilder: (context, index) {
