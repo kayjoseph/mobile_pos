@@ -74,7 +74,6 @@ class Home extends StatelessWidget {
 
           // Calculate percentage
           final percentage = (entry.value / totalSales) * 100;
-
           return PieChartSectionData(
             value: entry.value,
             title: '${entry.key}\n${percentage.toStringAsFixed(1)}%',
@@ -351,7 +350,6 @@ class Home extends StatelessWidget {
             style: TextStyle(fontSize: 16),
           ),
         ),
-
         // Pie chart container
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
