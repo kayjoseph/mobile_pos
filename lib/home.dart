@@ -336,7 +336,6 @@ class Home extends StatelessWidget {
             ],
           ),
         ),
-
         // POS mobile info container
         Container(
           padding: const EdgeInsets.all(20),
