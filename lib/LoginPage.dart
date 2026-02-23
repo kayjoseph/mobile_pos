@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_pos/home.dart';
+import 'package:mobile_pos/db/app_database.dart';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
@@ -10,6 +11,22 @@ class Loginpage extends StatefulWidget {
 
 class _LoginpageState extends State<Loginpage> {
   final _formKey = GlobalKey<FormState>();
+
+  late final AppDatabase db;
+
+  @override
+  void initState() {
+    super.initState();
+    db = AppDatabase();
+    _ensureDefaultAdmin();
+  }
+
+  Future<void> _ensureDefaultAdmin() async {
+    final user = await db.getUser('admin');
+    if (user == null) {
+      await db.insertUser('admin', '1234');
+    }
+  }
 
   void _forgotPassword() {
     final usernameController = TextEditingController();
@@ -40,38 +57,35 @@ class _LoginpageState extends State<Loginpage> {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
-              final username =
-              usernameController.text.trim().toLowerCase();
-              final newPassword = newPasswordController.text.trim();
+          onPressed: () async {
+            final username =
+            usernameController.text.trim().toLowerCase();
+            final newPassword = newPasswordController.text.trim();
 
-              if (username.isEmpty || newPassword.isEmpty) {
-                _showMessage('All fields are required', isError: true);
-                return;
-              }
+            if (username.isEmpty || newPassword.isEmpty) {
+              _showMessage('All fields are required', isError: true);
+              return;
+            }
+            if (newPassword.length < 4) {
+              _showMessage(
+              'Password must be at least 4 characters',
+              isError: true,
+    );
+              return;
+            }
 
-              if (!_users.containsKey(username)) {
-                _showMessage('Username does not exist', isError: true);
-                return;
-              }
+            final updated = await db.updatePassword(username, newPassword);
 
-              if (newPassword.length < 4) {
-                _showMessage(
-                  'Password must be at least 4 characters',
-                  isError: true,
-                );
-                return;
-              }
+            if (!updated) {
+              _showMessage('Username does not exist', isError: true);
+              return;
+            }
 
-              setState(() {
-                _users[username] = newPassword;
-              });
-
-              Navigator.pop(context);
-              _showMessage('Password reset successful');
-            },
-            child: const Text('Reset'),
-          ),
+            Navigator.pop(context);
+            _showMessage('Password reset successful');
+          },
+          child: const Text('Reset'),
+    ),
         ],
       ),
     );
@@ -80,43 +94,45 @@ class _LoginpageState extends State<Loginpage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  // In-memory user store (username → password)
-  static final Map<String, String> _users = {
-    'admin': '1234', // default account
-  };
 
   bool _isCreatingAccount = false;
 
-  void _handleSubmit() {
+  Future<void> _handleSubmit() async {
     if (_formKey.currentState!.validate()) {
       final username = usernameController.text.trim().toLowerCase();
       final password = passwordController.text.trim();
 
       if (_isCreatingAccount) {
-        if (_users.containsKey(username)) {
+        final existing = await db.getUser(username);
+
+        if (existing != null) {
           _showMessage('Username already exists', isError: true);
           return;
         }
 
-        _users[username] = password;
+        await db.insertUser(username, password);
+
         _showMessage('Account created successfully');
+
         setState(() {
           _isCreatingAccount = false;
         });
+
         usernameController.clear();
         passwordController.clear();
       } else {
-        // ===== LOGIN =====
-        if (!_users.containsKey(username)) {
+        final user = await db.getUser(username);
+
+        if (user == null) {
           _showMessage('Username does not exist', isError: true);
           return;
         }
 
-        if (_users[username] != password) {
+        if (user.password != password) {
           _showMessage('Wrong password', isError: true);
           return;
         }
-        // ===== SUCCESS =====
+
         _showMessage('Login successful');
 
         Navigator.pushReplacement(
@@ -142,6 +158,7 @@ class _LoginpageState extends State<Loginpage> {
     usernameController.dispose();
     passwordController.dispose();
     super.dispose();
+    db.close();
   }
 
   @override
@@ -206,7 +223,6 @@ class _LoginpageState extends State<Loginpage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Submit Button
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: ElevatedButton(
@@ -249,7 +265,18 @@ class _LoginpageState extends State<Loginpage> {
           const Padding(
             padding: EdgeInsets.only(top: 10),
             child: Text(
-              'Powered by JOSEPH - 0746050626',
+              'POWERED BY JOSEPH - 0746050626',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black54,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 10),
+            child: Text(
+              'COPYRIGHT © 2026 ALL RIGHTS RESERVED.   MOBILE 1.0.0',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.black54,
