@@ -38,11 +38,11 @@ class _SplashScreenState extends State<SplashScreen> {
               width: 180,
               fit: BoxFit.contain,
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 8),
             Text(
               'Sell.Manage.Grow',
             style: TextStyle(
-              fontSize: 15,
+              fontSize: 19,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
