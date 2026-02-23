@@ -23,7 +23,6 @@ class Sales extends StatefulWidget {
 
   static int get completedSalesCount => sales.length;
 
-
   @override
   State<Sales> createState() => _SalesState();
 }
@@ -88,7 +87,6 @@ class _SalesState extends State<Sales> {
       });
     }
   }
-
 
   double get _cartTotal {
     double total = 0.0;
@@ -271,12 +269,14 @@ class _SalesState extends State<Sales> {
       _filteredProducts = List.from(Products.products);
     });
 
-    _showMessage('Sale completed successfully');
+    _showMessage('Sale completed successfully',);
   }
 
   void _showMessage(String msg) {
     ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(msg)));
+        .showSnackBar(SnackBar(content: Text(msg),
+    ),
+    );
   }
 
   @override
@@ -765,5 +765,3 @@ class _SalesState extends State<Sales> {
     );
   }
 }
-
-
