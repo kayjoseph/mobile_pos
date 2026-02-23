@@ -285,7 +285,7 @@ class _SalesState extends State<Sales> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.lightBlue,
+          backgroundColor: Colors.blueAccent,
           title: const Text('Sales', style: TextStyle(color: Colors.white),),
           bottom: const TabBar(
             labelColor: Colors.white,
