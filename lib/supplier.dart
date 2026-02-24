@@ -9,8 +9,8 @@ import 'package:mobile_pos/profit&loss_report.dart';
 import 'package:mobile_pos/sales.dart';
 import 'package:mobile_pos/sales_report.dart';
 import 'package:mobile_pos/settings.dart';
-import 'supplier_model.dart';
 import 'suppliers_list.dart';
+import 'package:mobile_pos/db/app_database.dart';
 
 class CreateSupplierPage extends StatefulWidget {
   const CreateSupplierPage({super.key});
@@ -26,22 +26,30 @@ class _CreateSupplierPageState extends State<CreateSupplierPage> {
   final _emailController = TextEditingController();
   final _descriptionController = TextEditingController();
 
-  static final List<SupplierModel> _suppliers = [];
+  late AppDatabase db;
 
-  void _createSupplier() {
+  @override
+  void initState() {
+    super.initState();
+    db = AppDatabase();
+  }
+
+  Future<void> _createSupplier() async {
     if (_formKey.currentState!.validate()) {
-      final supplier = SupplierModel(
-        name: _nameController.text,
-        phone: _phoneController.text,
-        email: _emailController.text,
-        description: _descriptionController.text,
+
+      await db.insertSupplier(
+        SuppliersCompanion.insert(
+          name: _nameController.text,
+          phone: _phoneController.text,
+          email: _emailController.text,
+          description: _descriptionController.text,
+        ),
       );
-      _suppliers.add(supplier);
 
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => SuppliersList(suppliers: _suppliers),
+          builder: (_) => const SuppliersList(),
         ),
       );
     }
@@ -317,7 +325,7 @@ class _CreateSupplierPageState extends State<CreateSupplierPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SuppliersList(suppliers: _suppliers),
+                          builder: (context) => const SuppliersList(),
                         ),
                       );
                     },
