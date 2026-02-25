@@ -1,25 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_pos/db/app_database.dart';
 import 'package:mobile_pos/customer.dart';
-import 'package:mobile_pos/customer_model.dart';
 
 class CustomersList extends StatefulWidget {
-  final List<CustomerModel> customers;
-
-  const CustomersList({super.key, required this.customers});
+  const CustomersList({super.key});
 
   @override
   State<CustomersList> createState() => _CustomersListState();
 }
 
 class _CustomersListState extends State<CustomersList> {
-  void _deleteCustomer(int index) {
+
+  late AppDatabase db;
+  List<Customer> customers = [];
+
+  Future<void> _deleteCustomer(int index) async {
+    final customer = customers[index];
+    await db.deleteCustomer(customer.id);
+    await _loadCustomers();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    db = AppDatabase();
+    _loadCustomers();
+  }
+
+  Future<void> _loadCustomers() async {
+    final data = await db.getAllCustomers();
     setState(() {
-      widget.customers.removeAt(index);
+      customers = data;
     });
   }
 
   void _editcustomer(int index) {
-    final customer = widget.customers[index];
+    final customer = customers[index];
     final nameController = TextEditingController(text: customer.name);
     final phoneController = TextEditingController(text: customer.phone);
     final emailController = TextEditingController(text: customer.email);
@@ -62,17 +78,20 @@ class _CustomersListState extends State<CustomersList> {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
-              setState(() {
-                widget.customers[index] = CustomerModel(
-                  name: nameController.text,
-                  phone: phoneController.text,
-                  email: emailController.text,
-                  description: descriptionController.text,
-                );
-              });
+            onPressed: () async {
+
+              final updated = customer.copyWith(
+                name: nameController.text,
+                phone: phoneController.text,
+                email: emailController.text,
+                //description: descriptionController.text,
+
+              );
+
+              await db.updateCustomer(updated);
 
               Navigator.pop(context);
+              await _loadCustomers();
             },
             child: const Text('Save'),
           ),
@@ -84,7 +103,8 @@ class _CustomersListState extends State<CustomersList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Customers'),
+        backgroundColor: Colors.orangeAccent,
+        title: const Text('Customers List', style: TextStyle(color: Colors.white),),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 15),
@@ -114,12 +134,16 @@ class _CustomersListState extends State<CustomersList> {
           ),
         ],
       ),
-      body: widget.customers.isEmpty
-          ? const Center(child: Text('No Customers added yet'))
+      body: customers.isEmpty
+          ? const Center(child: Text('No Customers added yet',
+      style: TextStyle(fontSize: 18,
+      ),
+      ),
+      )
           : ListView.builder(
-        itemCount: widget.customers.length,
+        itemCount: customers.length,
         itemBuilder: (context, index) {
-          final customer = widget.customers[index];
+          final customer = customers[index];
           return Card(
             margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             child: ListTile(
