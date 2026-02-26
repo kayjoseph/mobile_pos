@@ -1,24 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_pos/supplier.dart';
-import 'supplier_model.dart';
+import 'package:mobile_pos/db/app_database.dart';
 
 class SuppliersList extends StatefulWidget {
-  final List<SupplierModel> suppliers;
-
-  const SuppliersList({super.key, required this.suppliers});
+  const SuppliersList({super.key});
 
   @override
   State<SuppliersList> createState() => _SuppliersListState();
 }
 
 class _SuppliersListState extends State<SuppliersList> {
-  void _deleteSupplier(int index) {
+  Future<void> _deleteSupplier(int index) async {
+    final supplier = suppliers[index];
+    await db.deleteSupplier(supplier.id);
+    await _loadSuppliers();
+  }
+
+  late AppDatabase db;
+  List<Supplier> suppliers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    db = AppDatabase();
+    _loadSuppliers();
+  }
+
+  Future<void> _loadSuppliers() async {
+    final data = await db.getAllSuppliers();
     setState(() {
-      widget.suppliers.removeAt(index);
+      suppliers = data;
     });
   }
+
   void _editSupplier(int index) {
-    final supplier = widget.suppliers[index];
+    final supplier = suppliers[index];
     final nameController = TextEditingController(text: supplier.name);
     final phoneController = TextEditingController(text: supplier.phone);
     final emailController = TextEditingController(text: supplier.email);
@@ -61,15 +77,16 @@ class _SuppliersListState extends State<SuppliersList> {
             child: Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
-              setState(() {
-                widget.suppliers[index] = SupplierModel(
-                  name: nameController.text,
-                  phone: phoneController.text,
-                  email: emailController.text,
-                  description: descriptionController.text,
-                );
-              });
+            onPressed: () async {
+              final updated = supplier.copyWith(
+                name: nameController.text,
+                phone: phoneController.text,
+                email: emailController.text,
+                description: descriptionController.text,
+              );
+
+              await db.updateSupplier(updated);
+              await _loadSuppliers();
 
               Navigator.pop(context);
             },
@@ -114,14 +131,15 @@ class _SuppliersListState extends State<SuppliersList> {
           ),
         ],
       ),
-      body: widget.suppliers.isEmpty
+      body: suppliers.isEmpty
           ? const Center(child: Text('No suppliers added yet',
       style: TextStyle(fontSize: 18,
       ),))
           : ListView.builder(
-        itemCount: widget.suppliers.length,
+        itemCount: suppliers.length,
         itemBuilder: (context, index) {
-          final supplier = widget.suppliers[index];
+          final supplier = suppliers[index];
+
           return Card(
             margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             child: ListTile(
