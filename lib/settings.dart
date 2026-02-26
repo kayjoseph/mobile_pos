@@ -9,6 +9,7 @@ import 'package:mobile_pos/profit&loss_report.dart';
 import 'package:mobile_pos/sales.dart';
 import 'package:mobile_pos/sales_report.dart';
 import 'package:mobile_pos/supplier.dart';
+import 'package:mobile_pos/db/app_database.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -18,14 +19,55 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+
+  final AppDatabase appDb = AppDatabase();
+
+  Future<void> _confirmAndResetDatabase() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Reset database'),
+        content: const Text(
+          'This will permanently delete all data '
+              '(products, users, sales, expenses, customers and suppliers).',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('No'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Yes, reset'),
+          ),
+        ],
+      ),
+    );
+
+    if (result == true) {
+      await appDb.resetDatabase();
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Database reset successfully')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.orangeAccent,
-        title: Text("Settings", style: TextStyle(color: Colors.white),),
+        title: const Text(
+          "Settings",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
+
+      // ---------------- Drawer (unchanged) ----------------
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -43,42 +85,35 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home_filled, color: Colors.blue),
-              title: Text('Home'),
+              leading: const Icon(Icons.home_filled, color: Colors.blue),
+              title: const Text('Home'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => Home(),
-                  ),
+                  MaterialPageRoute(builder: (context) => Home()),
                 );
               },
             ),
             ListTile(
-              leading: Icon(Icons.inventory, color: Colors.blue),
-              title: Text('Products'),
+              leading: const Icon(Icons.inventory, color: Colors.blue),
+              title: const Text('Products'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => Products(),
-                  ),
+                  MaterialPageRoute(builder: (context) => Products()),
                 );
               },
             ),
-
             ListTile(
-              leading: Icon(Icons.shopping_cart, color: Colors.blue),
-              title: Text('Sales'),
+              leading: const Icon(Icons.shopping_cart, color: Colors.blue),
+              title: const Text('Sales'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => Sales(),
-                  ),
+                  MaterialPageRoute(builder: (context) => Sales()),
                 );
               },
             ),
@@ -89,106 +124,142 @@ class _SettingsState extends State<Settings> {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const Expenses(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const Expenses()),
                 );
               },
             ),
             ListTile(
-              leading: Icon(Icons.local_shipping, color: Colors.blue),
-              title: Text('Suppliers'),
+              leading: const Icon(Icons.local_shipping, color: Colors.blue),
+              title: const Text('Suppliers'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => CreateSupplierPage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => CreateSupplierPage()),
                 );
               },
             ),
             ListTile(
-              leading: Icon(Icons.people, color: Colors.blue),
-              title: Text('Customers'),
+              leading: const Icon(Icons.people, color: Colors.blue),
+              title: const Text('Customers'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => CreateCustomerPage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => CreateCustomerPage()),
                 );
               },
             ),
-            // Reports Manager Dropdown
+
             ExpansionTile(
               leading: const Icon(Icons.folder_open, color: Colors.blue),
               title: const Text('Reports Manager'),
               children: [
                 ListTile(
-                  leading: const Icon(Icons.inventory_2_outlined, color: Colors.blueAccent, size: 20,),
-                  title: const Text('Products Report', style: TextStyle(fontSize: 14),),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const ProductsValuationReport(),
-                      ),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.show_chart, color: Colors.blueAccent, size: 20,),
-                  title: const Text('Sales Report', style: TextStyle(fontSize: 14),),
+                  leading: const Icon(Icons.inventory_2_outlined,
+                      color: Colors.blueAccent, size: 20),
+                  title: const Text('Products Report',
+                      style: TextStyle(fontSize: 14)),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SalesReport(),//SalesReportPage(),
+                        builder: (context) =>
+                        const ProductsValuationReport(),
                       ),
                     );
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.insert_chart_outlined, color: Colors.blueAccent, size: 20,),
-                  title: const Text('Profit & Loss Report', style: TextStyle(fontSize: 14),),
+                  leading: const Icon(Icons.show_chart,
+                      color: Colors.blueAccent, size: 20),
+                  title: const Text('Sales Report',
+                      style: TextStyle(fontSize: 14)),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const ProfitLossReport(),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SalesReport(),
                       ),
                     );
                   },
-                )
+                ),
+                ListTile(
+                  leading: const Icon(Icons.insert_chart_outlined,
+                      color: Colors.blueAccent, size: 20),
+                  title: const Text('Profit & Loss Report',
+                      style: TextStyle(fontSize: 14)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfitLossReport(),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
+
             ListTile(
-              leading: Icon(Icons.settings, color: Colors.blue),
-              title: Text('Settings'),
+              leading: const Icon(Icons.settings, color: Colors.blue),
+              title: const Text('Settings'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => Settings(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const Settings()),
                 );
               },
             ),
 
             ListTile(
-              leading: Icon(Icons.logout_outlined, color: Colors.red),
-              title: Text('Sign Out'),
+              leading: const Icon(Icons.logout_outlined, color: Colors.red),
+              title: const Text('Sign Out'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => Loginpage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => Loginpage()),
                 );
               },
+            ),
+          ],
+        ),
+      ),
+
+      // ---------------- Settings content ----------------
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            const Text(
+              'Danger zone',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: _confirmAndResetDatabase,   // ✅ method is referenced here
+                icon: const Icon(Icons.delete_forever),
+                label: const Text('Reset database'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+              ),
             ),
           ],
         ),
