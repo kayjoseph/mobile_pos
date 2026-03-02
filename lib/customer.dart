@@ -1,48 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_pos/LoginPage.dart';
-import 'package:mobile_pos/customers_list.dart';
 import 'package:mobile_pos/expenses.dart';
-import 'package:mobile_pos/home.dart';
 import 'package:mobile_pos/products.dart';
+import 'package:mobile_pos/home.dart';
 import 'package:mobile_pos/products_report.dart';
 import 'package:mobile_pos/profit&loss_report.dart';
 import 'package:mobile_pos/sales.dart';
 import 'package:mobile_pos/sales_report.dart';
 import 'package:mobile_pos/settings.dart';
 import 'package:mobile_pos/supplier.dart';
-import 'package:mobile_pos/customer_model.dart';
+import 'package:mobile_pos/db/app_database.dart';
+import 'package:drift/drift.dart' show Value;
+import 'package:mobile_pos/customers_list.dart';
 
 class CreateCustomerPage extends StatefulWidget {
   const CreateCustomerPage({super.key});
 
   @override
-  State<CreateCustomerPage> createState() => _CreateCustomerPageState();
+  State<CreateCustomerPage> createState() => _createCustomerPageState();
 }
 
-class _CreateCustomerPageState extends State<CreateCustomerPage> {
+class _createCustomerPageState extends State<CreateCustomerPage> {
+
+  late AppDatabase db;
+
+  @override
+  void initState() {
+    super.initState();
+    db = AppDatabase();
+  }
+
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
   final _descriptionController = TextEditingController();
 
-  static final List<CustomerModel> _customers = [];
 
-  void _CreateCustomer() {
+  Future<void> _createCustomer() async {
     if (_formKey.currentState!.validate()) {
-      final supplier = CustomerModel(
-        name: _nameController.text,
-        phone: _phoneController.text,
-        email: _emailController.text,
-        description: _descriptionController.text,
 
+      await db.insertCustomer(
+        CustomersCompanion.insert(
+          name: _nameController.text,
+          phone: _phoneController.text,
+          email: _emailController.text,
+          description: _descriptionController.text,
+        ),
       );
-      _customers.add(supplier);
 
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => CustomersList(customers: _customers),
+          builder: (_) => const CustomersList(),
         ),
       );
     }
@@ -53,7 +63,7 @@ class _CreateCustomerPageState extends State<CreateCustomerPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.orangeAccent,
-        title: Text("Customers"),
+        title: Text("Customers", style: TextStyle(color: Colors.white),),
       ),
       drawer: Drawer(
         child: ListView(
@@ -291,7 +301,7 @@ class _CreateCustomerPageState extends State<CreateCustomerPage> {
                   width: 220,
                   height: 40,
                   child: ElevatedButton(
-                    onPressed: _CreateCustomer,
+                    onPressed: _createCustomer,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       foregroundColor: Colors.blueAccent,
@@ -308,33 +318,34 @@ class _CreateCustomerPageState extends State<CreateCustomerPage> {
                   ),
                 ),
                 const SizedBox(height: 10),
-            SizedBox(
-              width: 220,
-              height: 40,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CustomersList(customers: _customers),
+                SizedBox(
+                  width: 220,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CustomersList(),
+                        ),
+                      );
+                      },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      foregroundColor: Colors.blueAccent,
+                      side: const BorderSide(color: Colors.blueAccent, width: 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  foregroundColor: Colors.blueAccent,
-                  side: const BorderSide(color: Colors.blueAccent, width: 1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    child: const Text('View Customer List',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15
+                      ),
+                    ),
                   ),
                 ),
-                child: const Text('View Customer List',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15
-                  ),),
-              ),
-            ),
               ],
             ),
           ),
