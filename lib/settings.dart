@@ -28,8 +28,7 @@ class _SettingsState extends State<Settings> {
       builder: (context) => AlertDialog(
         title: const Text('Reset database'),
         content: const Text(
-          'This will permanently delete all data '
-              '(products, users, sales, expenses, customers and suppliers).',
+          'This will permanently delete all data, proceed with caution 💀☠️ ',
         ),
         actions: [
           TextButton(
