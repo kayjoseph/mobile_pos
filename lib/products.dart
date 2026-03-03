@@ -11,6 +11,8 @@ import 'package:mobile_pos/product.dart';
 import 'package:mobile_pos/sales_report.dart';
 import 'package:mobile_pos/settings.dart';
 import 'package:mobile_pos/supplier.dart';
+import 'package:mobile_pos/db/app_database.dart';
+import 'package:drift/drift.dart' show Value;
 
 class Products extends StatefulWidget {
   const Products({super.key});
@@ -25,32 +27,59 @@ class Products extends StatefulWidget {
 }
 
 class _ProductsState extends State<Products> {
-  List<Product> _filteredProducts = [];
+
+  late AppDatabase db;
+
+  List<ProductEntry> _products = [];
+  List<ProductEntry> _filteredProducts = [];
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _filteredProducts = List.from(Products.products);
+    _filteredProducts = [];
+    db = AppDatabase();
+    _loadProducts();
   }
 
-  void _addProduct(Product product) {
+  Future<void> _loadProducts() async {
+    final rows = await db.getAllProducts();
+
     setState(() {
-      Products.products.add(product);
-      _filteredProducts = List.from(Products.products);
+      _products = rows;
+      _filteredProducts = rows;
     });
   }
 
+  Future<void> _addProduct(Product product) async {
+    debugPrint('ADD PRODUCT CALLED: ${product.name}');
+
+    await db.insertProduct(
+      ProductEntriesCompanion.insert(
+        name: product.name,
+        purchasePrice: double.tryParse(product.purchasePrice) ?? 0,
+        sellingPrice: double.tryParse(product.sellingPrice) ?? 0,
+        category: product.category,
+        qty: product.qty,
+        showOnCatalog: Value(product.showOnCatalog),
+      ),
+    );
+
+    await _loadProducts();
+  }
+
   void _filterProducts(String query) {
+    final q = query.toLowerCase();
+
     setState(() {
-      if (query.isEmpty) {
-        _filteredProducts = List.from(Products.products);
+      if (q.isEmpty) {
+        _filteredProducts = _products;
       } else {
-        _filteredProducts = Products.products
-            .where((p) =>
-        p.name.toLowerCase().contains(query.toLowerCase()) ||
-            p.qty.toString().contains(query))
-            .toList();
+        _filteredProducts = _products.where((p) {
+          return p.name.toLowerCase().contains(q) ||
+              p.category.toLowerCase().contains(q) ||
+              p.qty.toString().contains(q);
+        }).toList();
       }
     });
   }
@@ -238,7 +267,7 @@ class _ProductsState extends State<Products> {
           backgroundColor: Colors.orangeAccent,
           elevation: 1,
           title: Text(
-            'Products (${Products.products.length})',
+            'Products (${_products.length})',
             style: const TextStyle(color: Colors.black),
           ),
           bottom: const TabBar(
@@ -437,14 +466,17 @@ class _ProductsState extends State<Products> {
                               ),
                             ),
                             TextButton.icon(
-                              onPressed: () {
-                                Navigator.push(
+                              onPressed: () async {
+                                await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         AddItem(onProductCreated: _addProduct),
                                   ),
                                 );
+
+                                // reload when coming back
+                                await _loadProducts();
                               },
                               icon: const Icon(Icons.add_circle,
                                   color: Color(0xFF1ABC9C)),
@@ -465,8 +497,6 @@ class _ProductsState extends State<Products> {
                     itemCount: _filteredProducts.length,
                     itemBuilder: (context, index) {
                       final product = _filteredProducts[index];
-                      final realIndex =
-                      Products.products.indexOf(product);
 
                       return Card(
                         margin: const EdgeInsets.symmetric(
@@ -481,39 +511,31 @@ class _ProductsState extends State<Products> {
                               IconButton(
                                 icon: const Icon(Icons.edit,
                                     color: Colors.blue),
-                                onPressed: () =>
-                                    _showEditDialog(product, realIndex),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
-                                onPressed: () async {
-                                  final confirm = await showDialog<bool>(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text('Delete item'),
-                                      content: const Text('Are you sure you want to delete this item?'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () => Navigator.pop(context, false),
-                                          child: const Text('No'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () => Navigator.pop(context, true),
-                                          child: const Text('Yes'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+                                  onPressed: () async {
+                                    final confirm = await showDialog<bool>(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text('Delete item'),
+                                        content: const Text('Are you sure you want to delete this item?'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context, false),
+                                            child: const Text('No'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () => Navigator.pop(context, true),
+                                            child: const Text('Yes'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
 
-                                  if (confirm == true) {
-                                    setState(() {
-                                      Products.products.removeAt(realIndex);
-                                      _filteredProducts = List.from(Products.products);
-                                    });
+                                    if (confirm == true) {
+                                      await db.deleteProduct(product.id);
+                                      await _loadProducts();
+                                    }
                                   }
-                                },
                               ),
-
                             ],
                           ),
                         ),
@@ -551,7 +573,7 @@ class _ProductsState extends State<Products> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.edit, color: Colors.blue),
+                                      icon: const Icon(Icons.edit, color: Colors.blueAccent),
                                       onPressed: () => _showEditCategoryDialog(index),
                                     ),
                                     IconButton(
