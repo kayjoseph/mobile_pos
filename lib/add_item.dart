@@ -22,7 +22,6 @@ class _AddItemPageState extends State<AddItem> {
   final _formKey = GlobalKey<FormState>();
 
   Future<void> _createProduct() async {
-    // Collect product data
     final product = Product(
       name: _itemNameController.text,
       purchasePrice: _purchasePriceController.text,
@@ -32,7 +31,7 @@ class _AddItemPageState extends State<AddItem> {
       showOnCatalog: showOnCatalog,
     );
 
-    widget.onProductCreated(product);
+    await widget.onProductCreated(product);
 
     _itemNameController.clear();
     _purchasePriceController.clear();
@@ -82,6 +81,7 @@ class _AddItemPageState extends State<AddItem> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
+          key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -109,8 +109,8 @@ class _AddItemPageState extends State<AddItem> {
               Align(
                 alignment: Alignment.center, // or Alignment.center if you want it centered
                 child: ElevatedButton(
-                  onPressed: () {
-                    _createProduct();
+                  onPressed: () async {
+                    await _createProduct();
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
