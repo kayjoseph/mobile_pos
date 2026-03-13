@@ -21,7 +21,6 @@ class Products extends StatefulWidget {
   static final List<Product> products = [];
   static final List<String> categories = [];
 
-
   @override
   State<Products> createState() => _ProductsState();
 }
@@ -114,8 +113,7 @@ class _ProductsState extends State<Products> {
   }
 
   void _showEditCategoryDialog(int index) {
-    final controller =
-    TextEditingController(text: Products.categories[index]);
+    final controller = TextEditingController(text: Products.categories[index]);
 
     showDialog(
       context: context,
@@ -153,9 +151,7 @@ class _ProductsState extends State<Products> {
 
   void _addCategory(String name) {
     final trimmed = name.trim();
-
     if (trimmed.isEmpty) return;
-
     if (!Products.categories.contains(trimmed)) {
       setState(() {
         Products.categories.add(trimmed);
