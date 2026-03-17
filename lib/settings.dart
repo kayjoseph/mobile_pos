@@ -238,7 +238,7 @@ class _SettingsState extends State<Settings> {
           children: [
 
             const Text(
-              'Danger zone',
+              'Advanced Settings',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
