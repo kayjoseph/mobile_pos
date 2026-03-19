@@ -505,8 +505,8 @@ class _ProductsState extends State<Products> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.edit,
-                                    color: Colors.blue),
+                                icon: const Icon(Icons.delete,
+                                    color: Colors.red),
                                   onPressed: () async {
                                     final confirm = await showDialog<bool>(
                                       context: context,
