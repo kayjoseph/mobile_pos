@@ -266,6 +266,9 @@ class _SettingsState extends State<Settings> {
               ),
             ),
 
+            const SizedBox(height: 8),
+
+
             const Text(
               'Advanced Settings',
               style: TextStyle(
