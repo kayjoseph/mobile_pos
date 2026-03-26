@@ -268,7 +268,27 @@ class _SettingsState extends State<Settings> {
 
             const SizedBox(height: 8),
 
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+              decoration: BoxDecoration(
+                color: Colors.green.shade50,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.green.shade200),
+              ),
+              child: Row(
+                children: const [
+                  Icon(Icons.restore, color: Colors.green),
+                  SizedBox(width: 10),
+                  Text(
+                    'Restore Database',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ],
+              ),
+            ),
 
+            const SizedBox(height: 24),
             const Text(
               'Advanced Settings',
               style: TextStyle(
