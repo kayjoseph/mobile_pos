@@ -301,16 +301,28 @@ class _SalesState extends State<Sales> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              const DrawerHeader(
+              DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors.blueAccent,
+                  color: Colors.white,
                 ),
-                child: Text(
-                  'Menu',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'MobilePOS',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Image.asset(
+                      'lib/Images/Reoprime Logo.png',
+                      width: 100,
+                      height: 80,
+                    ),
+                  ],
                 ),
               ),
               ListTile(
