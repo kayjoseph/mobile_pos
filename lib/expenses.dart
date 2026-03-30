@@ -282,10 +282,29 @@ class _ExpensesState extends State<Expenses> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blueAccent),
-            child: Text('Menu',
-                style: TextStyle(color: Colors.white, fontSize: 24)),
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'MobilePOS',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Image.asset(
+                  'lib/Images/Reoprime Logo.png',
+                  width: 100,
+                  height: 80,
+                ),
+              ],
+            ),
           ),
           ListTile(
             leading: const Icon(Icons.home_filled, color: Colors.blue),
