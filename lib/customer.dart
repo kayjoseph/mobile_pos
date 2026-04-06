@@ -171,7 +171,6 @@ class _createCustomerPageState extends State<CreateCustomerPage> {
                 );
               },
             ),
-            // Reports Manager Dropdown
             ExpansionTile(
               leading: const Icon(Icons.folder_open, color: Colors.blue),
               title: const Text('Reports Manager'),
