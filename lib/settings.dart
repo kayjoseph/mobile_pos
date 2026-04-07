@@ -308,13 +308,11 @@ class _SettingsState extends State<Settings> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 12),
-
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: _confirmAndResetDatabase,   // ✅ method is referenced here
+                onPressed: _confirmAndResetDatabase,
                 icon: const Icon(Icons.delete_forever),
                 label: const Text('Reset database'),
                 style: ElevatedButton.styleFrom(
