@@ -105,7 +105,8 @@ class _SalesState extends State<Sales> {
   @override
   void initState() {
     super.initState();
-    _filteredProducts = List.from(Products.products);
+    db = AppDatabase();
+    _loadProducts();
   }
 
   double get _grandTotal {
