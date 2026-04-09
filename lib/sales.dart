@@ -236,7 +236,7 @@ class _SalesState extends State<Sales> {
       _selectedProduct = null;
       _qtyController.clear();
       _searchController.clear();
-      _filteredProducts = List.from(Products.products);
+      _filteredProducts = List.from(_products);
     });
   }
 
