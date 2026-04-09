@@ -13,8 +13,8 @@ import 'package:mobile_pos/LoginPage.dart';
 import 'package:drift/drift.dart' as drift;
 
 class Expenses extends StatefulWidget {
-  const Expenses({super.key});
-
+  const Expenses({super.key}
+      );
   @override
   State<Expenses> createState() => _ExpensesState();
 }
@@ -95,7 +95,6 @@ class _ExpensesState extends State<Expenses> {
       // Reload expenses
       await _loadExpenses();
 
-      // Show floating top SnackBar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Expense saved'),
@@ -103,7 +102,7 @@ class _ExpensesState extends State<Expenses> {
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(16),
           backgroundColor: Colors.green,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
         ),
       );
     }
