@@ -289,7 +289,7 @@ class _SalesState extends State<Sales> {
       );
 
       _cart.clear();
-      _filteredProducts = List.from(Products.products);
+      _filteredProducts = List.from(_products);
     });
 
     _showMessage('Sale completed successfully',);
