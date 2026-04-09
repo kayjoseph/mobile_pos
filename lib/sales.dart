@@ -109,6 +109,23 @@ class _SalesState extends State<Sales> {
     _loadProducts();
   }
 
+  Future<void> _loadProducts() async {
+    final rows = await db.getAllProducts();
+
+    setState(() {
+      _products = rows.map((p) => Product(
+        name: p.name,
+        purchasePrice: p.purchasePrice.toString(),
+        sellingPrice: p.sellingPrice.toString(),
+        category: p.category,
+        qty: p.qty,
+        showOnCatalog: p.showOnCatalog,
+      )).toList();
+
+      _filteredProducts = List.from(_products);
+    });
+  }
+
   double get _grandTotal {
     return Sales.sales.fold(0.0, (sum, s) => sum + s.total);
   }
