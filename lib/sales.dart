@@ -11,6 +11,7 @@ import 'package:mobile_pos/supplier.dart';
 import 'product.dart';
 import 'sale.dart';
 import 'package:mobile_pos/products.dart';
+import 'package:mobile_pos/db/app_database.dart';
 
 class Sales extends StatefulWidget {
   const Sales({super.key});
@@ -27,6 +28,10 @@ class Sales extends StatefulWidget {
   State<Sales> createState() => _SalesState();
 }
 class _SalesState extends State<Sales> {
+
+  late AppDatabase db;
+  List<Product> _products = [];
+
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _qtyController = TextEditingController();
 
