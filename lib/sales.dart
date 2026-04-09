@@ -133,7 +133,7 @@ class _SalesState extends State<Sales> {
   void _filterProducts(String query) {
     setState(() {
       if (query.isEmpty) {
-        _filteredProducts = List.from(Products.products);
+        _filteredProducts = List.from(_products);
       } else {
         _filteredProducts = Products.products
             .where((p) =>
