@@ -135,7 +135,7 @@ class _SalesState extends State<Sales> {
       if (query.isEmpty) {
         _filteredProducts = List.from(_products);
       } else {
-        _filteredProducts = Products.products
+        _filteredProducts = _products
             .where((p) =>
             p.name.toLowerCase().contains(query.toLowerCase()))
             .toList();
