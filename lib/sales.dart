@@ -181,7 +181,7 @@ class _SalesState extends State<Sales> {
                 MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Total',
+                    'Totall',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
