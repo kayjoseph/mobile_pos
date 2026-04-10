@@ -255,10 +255,23 @@ class _SalesState extends State<Sales> {
     final List<SaleItem> items = [];
 
     setState(() {
-      _cart.forEach((product, qty) {
+      _cart.forEach((product, qty) async {
 
         // Deduct stock
         product.qty -= qty;
+
+        // 🔥 UPDATE DATABASE
+        await db.updateProduct(
+          ProductEntry(
+            id: product.id,
+            name: product.name,
+            purchasePrice: double.parse(product.purchasePrice),
+            sellingPrice: double.parse(product.sellingPrice),
+            category: product.category,
+            qty: product.qty,
+            showOnCatalog: product.showOnCatalog,
+          ),
+        );
 
         // Build sale item
         final sellingPrice =
