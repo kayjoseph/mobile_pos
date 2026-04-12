@@ -147,7 +147,7 @@ class _SalesState extends State<Sales> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sale Details'),
+        title: const Text('Sales Details'),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
