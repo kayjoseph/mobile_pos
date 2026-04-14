@@ -200,7 +200,7 @@ class _SalesState extends State<Sales> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: const Text('Closed'),
           ),
         ],
       ),
