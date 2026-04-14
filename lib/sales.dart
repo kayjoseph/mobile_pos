@@ -354,7 +354,7 @@ class _SalesState extends State<Sales> {
                     ),
                     SizedBox(height: 10),
                     Image.asset(
-                      'lib/Images/Reoprim Logo.png',
+                      'lib/Images/Reoprime Logo.png',
                       width: 100,
                       height: 80,
                     ),
