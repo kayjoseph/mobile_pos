@@ -693,7 +693,7 @@ class _SalesState extends State<Sales> {
                               minimumSize: Size.zero,
                             ),
                             child: const Text(
-                              'Complete Sale',
+                              'Complet Sale',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
