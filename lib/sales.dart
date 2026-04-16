@@ -752,7 +752,7 @@ class _SalesState extends State<Sales> {
 
                 Expanded(
                   child: _filteredSales.isEmpty
-                      ? const Center(child: Text('No sale found'))
+                      ? const Center(child: Text('No sales found'))
                       : ListView.builder(
                     itemCount: _filteredSales.length,
                     itemBuilder: (context, index) {
