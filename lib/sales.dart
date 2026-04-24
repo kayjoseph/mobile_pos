@@ -793,7 +793,7 @@ class _SalesState extends State<Sales> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        'Grande Total',
+                        'Grand Total',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
