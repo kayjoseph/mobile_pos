@@ -738,7 +738,7 @@ class _SalesState extends State<Sales> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.clear),
-                        tooltip: 'Clea Filter',
+                        tooltip: 'Clear Filter',
                         onPressed: () {
                           setState(() {
                             _startDate = null;
