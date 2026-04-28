@@ -606,7 +606,7 @@ class _SalesState extends State<Sales> {
                     ),
                   ),
 
-                // 🛒 Cart sectio
+                // 🛒 Cart section
                 if (_cart.isNotEmpty)
                   Container(
                     padding: const EdgeInsets.all(12),
