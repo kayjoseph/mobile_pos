@@ -605,7 +605,6 @@ class _SalesState extends State<Sales> {
                       ),
                     ),
                   ),
-
                 // 🛒 Cart section
                 if (_cart.isNotEmpty)
                   Container(
