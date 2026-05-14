@@ -376,7 +376,7 @@ class _SalesState extends State<Sales> {
               ),
               ListTile(
                 leading: Icon(Icons.inventory, color: Colors.blue),
-                title: Text('Products'),
+                title: Text('Product'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(
