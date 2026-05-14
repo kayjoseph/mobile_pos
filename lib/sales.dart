@@ -403,7 +403,7 @@ class _SalesState extends State<Sales> {
               ),
               ListTile(
                 leading: const Icon(Icons.wallet, color: Colors.blue),
-                title: const Text('Expenses'),
+                title: const Text('Expense'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(
